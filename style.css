@@ -459,6 +459,7 @@ button { cursor: pointer; }
   .side { top: auto; bottom: 12px; right: 12px; left: 12px; width: auto; max-height: 55dvh; transform: none; padding: 20px; border-radius: 22px; }
   .side.hidden { transform: translateY(120%); }
   .side h2 { font-size: 22px; }
+  .side-photo { aspect-ratio: auto; height: min(30dvh, 220px); object-position: 60% 6%; }
   .index { left: 14px; bottom: 76px; width: min(272px, calc(100% - 28px)); max-height: 50dvh; }
   .radar-panel { left: 14px; top: 150px; width: min(290px, calc(100% - 28px)); max-height: 52dvh; }
   .view-buttons { right: 14px; bottom: 70px; padding: 4px; gap: 2px; }
