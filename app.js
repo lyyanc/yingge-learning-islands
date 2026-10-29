@@ -454,24 +454,28 @@ function drawPrincipal() {
   const walk = group(layer.principal, {class: 'principal-mini', tabindex: 0, role: 'button', 'aria-label': `${PRINCIPAL.name}校長，正在校園散步，點擊認識`});
   const q = group(walk, {transform: 'scale(.34)'});
   ellipse(0, 84, 30, 8, '#3a2a1f40', q);
-  line(-15, 75, -17, 86, '#2b3546', 9, q); line(15, 75, 17, 86, '#2b3546', 9, q);
-  poly([[-21, 43], [-9, 35], [10, 35], [23, 43], [28, 78], [-28, 78]], '#2f3b52', q, {stroke: '#fdf0de', 'stroke-width': 2});
-  poly([[-10, 38], [0, 61], [11, 38], [4, 75]], '#f7f8fa', q);
-  poly([[-3, 41], [3, 41], [6, 57], [0, 67], [-6, 57]], '#c0563a', q);
-  poly([[-21, 43], [-8, 37], [-1, 66], [-14, 57]], '#3d4b63', q);
-  poly([[21, 43], [8, 37], [1, 66], [14, 57]], '#3d4b63', q);
-  path('M -22 50 Q -34 58 -24 70', 'none', q, {stroke: '#2f3b52', 'stroke-width': 10, 'stroke-linecap': 'round'});
+  // 依照片：深藍西裝、淺藍條紋襯衫、深藍領帶、黑框眼鏡
+  line(-15, 75, -17, 86, '#1c2740', 9, q); line(15, 75, 17, 86, '#1c2740', 9, q);
+  poly([[-21, 43], [-9, 35], [10, 35], [23, 43], [28, 78], [-28, 78]], '#1f2d4a', q, {stroke: '#fdf0de', 'stroke-width': 2});
+  poly([[-10, 38], [0, 61], [11, 38], [4, 75]], '#d6e6f6', q);
+  poly([[-3, 41], [3, 41], [6, 57], [0, 67], [-6, 57]], '#22406e', q);
+  poly([[-21, 43], [-8, 37], [-1, 66], [-14, 57]], '#2b3b5c', q);
+  poly([[21, 43], [8, 37], [1, 66], [14, 57]], '#2b3b5c', q);
+  path('M -22 50 Q -34 58 -24 70', 'none', q, {stroke: '#1f2d4a', 'stroke-width': 10, 'stroke-linecap': 'round'});
   const arm = group(q, {class: 'wave'});
-  path('M 22 48 Q 39 35 32 15', 'none', arm, {stroke: '#2f3b52', 'stroke-width': 10, 'stroke-linecap': 'round'});
+  path('M 22 48 Q 39 35 32 15', 'none', arm, {stroke: '#1f2d4a', 'stroke-width': 10, 'stroke-linecap': 'round'});
   ellipse(32, 13, 7, 9, '#efc4a7', arm);
   const head = group(q, {class: 'nod'});
   ellipse(-27, 0, 6, 10, '#edbd9e', head); ellipse(27, 0, 6, 10, '#edbd9e', head);
   ellipse(0, 1, 30, 35, '#f2c8ab', head, {stroke: '#fdf2df', 'stroke-width': 2});
   path('M -30 -6 Q -34 -32 -12 -37 Q 6 -44 22 -34 Q 33 -26 30 -6 Q 24 -22 6 -25 Q -12 -22 -24 -16 Q -28 -12 -30 -6', '#2b2f33', head);
-  path('M -18 -8 Q -10 -12 -3 -9 M 5 -9 Q 13 -12 20 -8', 'none', head, {stroke: '#3a3833', 'stroke-width': 3.2, 'stroke-linecap': 'round'});
+  path('M -18 -11 Q -10 -15 -3 -12 M 5 -12 Q 13 -15 20 -11', 'none', head, {stroke: '#3a3833', 'stroke-width': 3.2, 'stroke-linecap': 'round'});
   const eyes = group(head, {class: 'blink'});
   ellipse(-11, 0, 3.1, 3.8, '#29333a', eyes); ellipse(12, 0, 3.1, 3.8, '#29333a', eyes);
   circle(-12, -1, 1, '#fff', eyes); circle(11, -1, 1, '#fff', eyes);
+  const glasses = {fill: '#ffffff1f', stroke: '#2a2523', 'stroke-width': 2.4};
+  rect(-20, -6, 17, 12, '', head, {rx: 3.5, ...glasses}); rect(4, -6, 17, 12, '', head, {rx: 3.5, ...glasses});
+  path('M -3 -1 Q 0.5 -3 4 -1 M -20 -2 L -27 -2 M 21 -2 L 27 -2', 'none', head, {stroke: '#2a2523', 'stroke-width': 2.2});
   path('M 0 6 Q -2 12 3 12', 'none', head, {stroke: '#d39d82', 'stroke-width': 2, 'stroke-linecap': 'round'});
   path('M -9 18 Q 1 26 12 17', 'none', head, {stroke: '#965f59', 'stroke-width': 2.4, 'stroke-linecap': 'round'});
   ellipse(-19, 12, 6, 3, '#eeb7a6', head, {opacity: .5}); ellipse(20, 12, 6, 3, '#eeb7a6', head, {opacity: .5});
@@ -517,9 +521,11 @@ ISLANDS.forEach(z => {
 
 /* ---------- 介紹面板 ---------- */
 let selectedId = 'ceramic';
-function openSide({kicker, title, desc, facts = [], tag = '', link = null, zoomable = false}) {
+function openSide({kicker, title, desc, facts = [], tag = '', link = null, zoomable = false, photo = null}) {
   $('sideKicker').textContent = kicker;
   $('sideTitle').textContent = title;
+  $('sidePhoto').hidden = !photo;
+  if (photo) Object.assign($('sidePhoto'), {src: photo.src, alt: photo.alt});
   $('sideDesc').textContent = desc;
   $('sideFacts').replaceChildren(...facts.map(f => Object.assign(document.createElement('li'), {textContent: f})));
   $('sideFacts').hidden = !facts.length;
@@ -543,7 +549,7 @@ function selectIsland(id) {
   highlight(id);
 }
 function meetPrincipal() {
-  openSide({kicker: 'MEET THE PRINCIPAL', title: `${PRINCIPAL.name} 校長`, desc: PRINCIPAL.desc, tag: PRINCIPAL.tag});
+  openSide({kicker: 'MEET THE PRINCIPAL', title: `${PRINCIPAL.name} 校長`, desc: PRINCIPAL.desc, tag: PRINCIPAL.tag, photo: {src: PRINCIPAL.photo, alt: `${PRINCIPAL.name}校長`}});
   highlight(null);
 }
 function meetLandmark() {

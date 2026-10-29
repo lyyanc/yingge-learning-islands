@@ -4,7 +4,6 @@
 
 const SCHOOL = {
   name: '新北市立鶯歌工商',
-  crest: '鶯工',
   en: 'YINGGE VOCATIONAL HIGH SCHOOL',
   sign: 'YKVS',
   url: 'https://www.ykvs.ntpc.edu.tw/',
@@ -109,7 +108,8 @@ const THEMES = [
 const PRINCIPAL = {
   name: '顏龍源',
   desc: '顏龍源校長正在九座學習島之間散步。鶯歌工商以「知書、達理、敬業、樂群」為校訓，從陶瓷、工藝、設計、資訊、商管、語文、服務到運動，每一座島都是學生發光的舞台。',
-  tag: '校園特別人物'
+  tag: '校園特別人物',
+  photo: 'principal.jpg'
 };
 
 const LANDMARK = {
