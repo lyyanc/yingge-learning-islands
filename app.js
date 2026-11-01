@@ -1,4 +1,4 @@
-/* 鶯歌工商・九座學習島：雲端島嶼、橋梁、師生、主題場景與校園尋寶。
+/* 鶯歌工商・十座學習島：雲端島嶼、橋梁、師生、主題場景與校園尋寶。
    科別介紹、島嶼位置與主題都在 data.js，這個檔案只負責畫面與互動。 */
 (() => {
 'use strict';
@@ -6,8 +6,11 @@
 const NS = 'http://www.w3.org/2000/svg';
 const $ = id => document.getElementById(id);
 const app = $('app'), svg = $('map'), stage = $('stage'), side = $('side');
-const VIEW_W = 1100, VIEW_H = 900, RX = 139, RY = 84, CLIFF = 27;
+const {width: VIEW_W, height: VIEW_H} = svg.viewBox.baseVal;
+const RX = 139, RY = 84, CLIFF = 27;
+svg.style.setProperty('--ratio', (VIEW_W / VIEW_H).toFixed(4));
 const TOTAL = ISLANDS.length;
+const CN = '零一二三四五六七八九十'[TOTAL] || String(TOTAL);   // 島嶼數的中文，例如「十」
 ISLANDS.forEach((z, i) => { z.n = i + 1; });
 const byId = Object.fromEntries(ISLANDS.map(z => [z.id, z]));
 const pad = n => String(n).padStart(2, '0');
@@ -79,7 +82,7 @@ E('stop', {offset: '1', 'stop-color': '#8a6047'}, under);
 const layer = {};
 for (const name of ['sky', 'ground', 'bridges', 'features', 'buildings', 'scenes', 'people', 'principal', 'labels', 'chests']) layer[name] = group(svg, {id: `layer-${name}`});
 
-for (let i = 0; i < 80; i++) circle(30 + (i * 163) % 1040, 24 + (i * 97) % 850, i % 6 === 0 ? 2.3 : 1.1, '#fff', layer.sky, {class: 'sky-dot'});
+for (let i = 0; i < 100; i++) circle(30 + (i * 163) % (VIEW_W - 60), 24 + (i * 97) % (VIEW_H - 50), i % 6 === 0 ? 2.3 : 1.1, '#fff', layer.sky, {class: 'sky-dot'});
 
 const hex = (cx, cy, rx = RX, ry = RY) => [[cx - rx, cy], [cx - rx * .48, cy - ry], [cx + rx * .48, cy - ry], [cx + rx, cy], [cx + rx * .48, cy + ry], [cx - rx * .48, cy + ry]];
 
@@ -196,6 +199,22 @@ const FEATURES = {
     for (const [x, y] of [[0, -12], [30, 2], [0, 16], [-30, 2]]) rect(x - 2.5, y - 2.5, 5, 5, '#fff', a, {transform: `rotate(45 ${x} ${y})`});
     txt(-12, -16, '⚾', 'ball', a, {'font-size': 14});
     txt(20, -12, '🥊', 'pulse', a, {'font-size': 14});
+  },
+  evening(a) { // 進修部：夜間的路燈、書桌、筆電與月亮
+    ellipse(0, 20, 32, 6, '#00000018', a);
+    line(-24, 19, -24, -24, '#4a4f6b', 3, a);
+    path('M -24 -24 Q -24 -31 -15 -31', 'none', a, {stroke: '#4a4f6b', 'stroke-width': 3, 'stroke-linecap': 'round'});
+    circle(-13, -25, 10, '#ffe9a8', a, {class: 'pulse', opacity: .55});
+    rect(-17, -30, 8, 6, '#ffd36b', a, {rx: 2});
+    rect(-10, 6, 40, 5, '#a7774f', a, {rx: 1});
+    line(-7, 11, -7, 19, '#8a5f3d', 2.5, a); line(27, 11, 27, 19, '#8a5f3d', 2.5, a);
+    rect(-2, -7, 16, 11, '#3a4250', a, {rx: 1.5});
+    rect(0, -5, 12, 7, '#9fe3f2', a);
+    poly([[-4, 6], [16, 6], [18, 4], [-2, 4]], '#55647a', a);
+    rect(18, 2, 11, 4, '#e18a73', a, {rx: 1});
+    rect(19, -2, 10, 4, '#81b6a7', a, {rx: 1});
+    rect(18, -6, 11, 4, '#e8bf6e', a, {rx: 1});
+    txt(12, -20, '🌙', 'note', a, {'font-size': 13});
   }
 };
 
@@ -412,13 +431,13 @@ function drawBuilding(z) {
     line(X + 2, fy + 13, X + W - 2, fy + 11, '#f0dcc2', 2, g);
     for (let c = 0; c < 4; c++) {
       const xx = X + 8 + c * 22, yy = fy - c * .16;
-      rect(xx, yy, 14, 10, '#8dbec4', g, {class: 'window', rx: 1.5});
+      rect(xx, yy, 14, 10, z.lit ? '#ffd98a' : '#8dbec4', g, {class: 'window', rx: 1.5});
       rect(xx + 2, yy + 2, 3, 6, '#d5f6ee', g, {class: 'glint', rx: 1, opacity: .75});
       line(xx + 7, yy + 1, xx + 7, yy + 9, '#f8f7e7', 1, g);
     }
     for (let c = 0; c < 2; c++) {
       const xx = X + W + 6 + c * 12, yy = fy - 4 - c * 7.5;
-      poly([[xx, yy], [xx + 8, yy - 5], [xx + 8, yy + 4], [xx, yy + 9]], '#7eb0bc', g, {class: 'window', stroke: '#f4f1df', 'stroke-width': 1.1});
+      poly([[xx, yy], [xx + 8, yy - 5], [xx + 8, yy + 4], [xx, yy + 9]], z.lit ? '#f3c76e' : '#7eb0bc', g, {class: 'window', stroke: '#f4f1df', 'stroke-width': 1.1});
     }
   }
   rect(X + W * .41, Y - 17, 20, 19, '#47747e', g, {class: 'door', rx: 1});
@@ -488,7 +507,7 @@ drawPrincipal();
 
 /* ---------- 鶯歌石：左上角的小浮島 ---------- */
 function drawLandmark() {
-  const g = at(layer.sky, 70, 70, {class: 'landmark', tabindex: 0, role: 'button', 'aria-label': '鶯歌石，點擊認識鶯歌地名的由來'});
+  const g = at(layer.sky, 1235, 215, {class: 'landmark', tabindex: 0, role: 'button', 'aria-label': '鶯歌石，點擊認識鶯歌地名的由來'});
   const f = group(g, {class: 'float'});
   path('M -46 8 Q -40 30 -14 46 Q 0 60 12 46 Q 38 30 46 8 Z', 'url(#underside)', f);
   ellipse(0, 8, 46, 17, '#c4dcae', f, {class: 'island-top', stroke: '#f6f3df', 'stroke-width': 3});
@@ -591,15 +610,19 @@ function setMode(mode, caption) {
   $('closeView').setAttribute('aria-pressed', String(mode === 'close'));
   $('viewCaption').textContent = caption;
 }
+const mapWidth = () => parseFloat(getComputedStyle(svg).width) || svg.getBoundingClientRect().width / zoom;
 function allIslands() {
-  zoom = 1; dx = dy = 0; spin = 0;
+  zoom = 1; dy = 0; spin = 0;
+  // 手機上地圖比螢幕寬，先把中央的陶瓷島放在畫面中間
+  const base = mapWidth();
+  dx = base > stage.clientWidth ? -(byId.ceramic.cx - VIEW_W / 2) * base / VIEW_W : 0;
   render();
-  setMode('all', '全景：九島一覽 · 拖曳移動');
+  setMode('all', `全景：${CN}島一覽 · 拖曳移動`);
 }
 function closeTo(id) {
   const z = byId[id] || byId.ceramic;
   selectedId = z.id;
-  const base = parseFloat(getComputedStyle(svg).width) || svg.getBoundingClientRect().width / zoom;
+  const base = mapWidth();
   zoom = innerWidth < 850 ? 1.35 : 1.75;
   spin = 0;
   const k = base / VIEW_W * zoom;
@@ -746,7 +769,7 @@ function updateHunt() {
 }
 function updateRadar() {
   const left = TOTAL - found.length;
-  $('radarSummary').textContent = left ? `已完成 ${found.length}/${TOTAL}，還有 ${left} 枚徽章等你尋找。點未完成的島嶼，畫面會移到附近。` : `九枚徽章全部到手！可以下載探索達人證書了。`;
+  $('radarSummary').textContent = left ? `已完成 ${found.length}/${TOTAL}，還有 ${left} 枚徽章等你尋找。點未完成的島嶼，畫面會移到附近。` : `${CN}枚徽章全部到手！可以下載探索達人證書了。`;
   const list = $('radarList');
   list.replaceChildren();
   ISLANDS.forEach(z => {
@@ -791,9 +814,9 @@ function showMedal(z, already) {
   card.replaceChildren();
   add('div', 'award-medal', z.icon);
   add('div', 'medal-kicker', `YINGGE EXPLORER · ${pad(z.n)}`);
-  add('h2', '', complete && !already ? '🎉 九島探索完成！' : already ? '已收藏的徽章' : '獲得專屬徽章！').id = 'medalTitle';
+  add('h2', '', complete && !already ? `🎉 ${CN}島探索完成！` : already ? '已收藏的徽章' : '獲得專屬徽章！').id = 'medalTitle';
   add('strong', 'medal-name', z.badge);
-  add('p', '', complete ? '太棒了！九枚專屬徽章全部到手，解鎖「鶯歌工商探索達人」電子證書。' : `${z.name}｜${z.tag}。目前 ${found.length} / ${TOTAL} 枚徽章，快到其他島嶼尋寶！`);
+  add('p', '', complete ? `太棒了！${CN}枚專屬徽章全部到手，解鎖「鶯歌工商探索達人」電子證書。` : `${z.name}｜${z.tag}。目前 ${found.length} / ${TOTAL} 枚徽章，快到其他島嶼尋寶！`);
   const actions = add('div', 'reward-actions');
   const close = document.createElement('button');
   close.type = 'button';
@@ -817,7 +840,7 @@ $('medalModal').addEventListener('click', e => { if (e.target === $('medalModal'
 /* ---------- 電子證書（只在瀏覽器裡產生，不上傳） ---------- */
 const CERT_FILE = '鶯歌工商探索達人_電子證書';
 function openCertificate() {
-  if (found.length !== TOTAL) { toast('集滿九枚徽章就能領取證書！'); return; }
+  if (found.length !== TOTAL) { toast(`集滿${CN}枚徽章就能領取證書！`); return; }
   $('radarPanel').hidden = true;
   $('certPanel').hidden = false;
   $('certName').focus();
@@ -826,8 +849,9 @@ const escapeXml = s => String(s).replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': 
 function certificateSvg(name) {
   const who = escapeXml(name || '校園探索者');
   const today = escapeXml(new Date().toLocaleDateString('zh-TW', {year: 'numeric', month: 'long', day: 'numeric'}));
-  const names = ISLANDS.map(z => z.name);
-  const row1 = names.slice(0, 5).join('、'), row2 = names.slice(5, -1).join('、') + '及' + names[names.length - 1];
+  const names = ISLANDS.map(z => z.name), half = Math.ceil(names.length / 2);
+  const row1 = names.slice(0, half).join('、'), row2 = names.slice(half, -1).join('、') + '及' + names[names.length - 1];
+  const english = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'][TOTAL] || TOTAL;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850">
 <defs><linearGradient id="paper" x2="1" y2="1"><stop stop-color="#fffdf4"/><stop offset="1" stop-color="#f6eadb"/></linearGradient><linearGradient id="gold" x2="1" y2="1"><stop stop-color="#f3d68d"/><stop offset="1" stop-color="#b88945"/></linearGradient></defs>
 <rect width="1200" height="850" fill="url(#paper)"/>
@@ -835,11 +859,11 @@ function certificateSvg(name) {
 <rect x="56" y="56" width="1088" height="738" rx="18" fill="none" stroke="#c98a62" stroke-width="3"/>
 <g font-family="Noto Sans TC, Microsoft JhengHei, PingFang TC, sans-serif" text-anchor="middle">
 <text x="600" y="160" fill="#8c4024" font-size="35" font-weight="900">${escapeXml(SCHOOL.name)}</text>
-<text x="600" y="203" fill="#a08a72" font-size="19" letter-spacing="5">NINE LEARNING ISLANDS · EXPLORER</text>
+<text x="600" y="203" fill="#a08a72" font-size="19" letter-spacing="5">${english} LEARNING ISLANDS · EXPLORER</text>
 <text x="600" y="292" fill="#bd9450" font-size="84">✦ 🏺 ✦</text>
 <text x="600" y="377" fill="#4a2e22" font-size="53" font-weight="900">鶯歌工商探索達人</text>
 <text x="600" y="455" fill="#b65a36" font-size="42" font-weight="800">${who}</text>
-<text x="600" y="522" fill="#6e5a4e" font-size="26">已完成九座學習島的探索任務，集滿</text>
+<text x="600" y="522" fill="#6e5a4e" font-size="26">已完成${CN}座學習島的探索任務，集滿</text>
 <text x="600" y="563" fill="#6e5a4e" font-size="23">${escapeXml(row1)}、</text>
 <text x="600" y="600" fill="#6e5a4e" font-size="23">${escapeXml(row2)}徽章</text>
 <text x="600" y="665" fill="#b38848" font-size="24" letter-spacing="4">${escapeXml(SCHOOL.motto)}</text>

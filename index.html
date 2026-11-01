@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f3e6d6">
-<title>鶯歌工商｜九座學習島・校園尋寶</title>
-<meta name="description" content="漂浮在雲海上的九座學習島：探索新北市立鶯歌工商的陶瓷工程科、美術工藝科、多媒體設計科、廣告設計科、資訊科、資料處理科、應用日語科、門市服務科與體育班。">
+<title>鶯歌工商｜十座學習島・校園尋寶</title>
+<meta name="description" content="漂浮在雲海上的十座學習島：探索新北市立鶯歌工商的陶瓷工程科、美術工藝科、多媒體設計科、廣告設計科、資訊科、資料處理科、應用日語科、門市服務科、體育班與進修部。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
@@ -32,7 +32,7 @@
 
   <section class="hunt-hud" aria-label="校園尋寶進度">
     <div class="cap">CAMPUS TREASURE HUNT</div>
-    <div class="main">✦　探索徽章 <strong id="foundCount">0 / 9</strong></div>
+    <div class="main">✦　探索徽章 <strong id="foundCount">0 / 10</strong></div>
     <div class="progress"><span id="huntFill"></span></div>
     <button type="button" id="radarBtn">📡 開啟尋寶雷達 ↗</button>
   </section>
@@ -41,7 +41,7 @@
   <div class="theme-caption" id="themeCaption" aria-live="polite"></div>
 
   <div class="stage" id="stage">
-    <svg id="map" viewBox="0 0 1100 900" role="img" aria-label="鶯歌工商九座學習島：陶瓷工程科、美術工藝科、多媒體設計科、廣告設計科、資訊科、資料處理科、應用日語科、門市服務科與體育班"></svg>
+    <svg id="map" viewBox="0 0 1400 900" role="img" aria-label="鶯歌工商十座學習島：陶瓷工程科、美術工藝科、多媒體設計科、廣告設計科、資訊科、資料處理科、應用日語科、門市服務科、體育班與進修部"></svg>
   </div>
 
   <aside class="side hidden" id="side" aria-live="polite">
@@ -71,7 +71,7 @@
     <div class="radar-list" id="radarList"></div>
   </section>
 
-  <div class="view-caption" id="viewCaption">全景：九島一覽 · 拖曳移動</div>
+  <div class="view-caption" id="viewCaption">全景：十島一覽 · 拖曳移動</div>
   <div class="view-buttons" role="group" aria-label="島嶼觀看模式">
     <button type="button" id="allView" aria-pressed="true">▦　全景</button>
     <button type="button" id="closeView" aria-pressed="false">⌕　近看</button>
@@ -81,7 +81,7 @@
   </div>
 
   <footer class="footer">
-    <div class="hint">🏫 點島嶼、校舍或島名，看各科介紹<br>🎁 打開九個發光寶箱，集滿下載證書</div>
+    <div class="hint">🏫 點島嶼、校舍或島名，看各科介紹<br>🎁 打開十個發光寶箱，集滿下載證書</div>
     <div class="navtools">
       <button type="button" class="round" id="minus" title="縮小" aria-label="縮小">−</button>
       <button type="button" class="round" id="plus" title="放大" aria-label="放大">+</button>
@@ -101,7 +101,7 @@
       <div class="crest-mini">🏆</div>
       <div class="kicker">YINGGE VOCATIONAL HIGH SCHOOL · EXPLORER</div>
       <h2 id="certTitle">鶯歌工商探索達人</h2>
-      <p>恭喜你走遍九座學習島，<br>完成九個科班的尋寶挑戰！<br>這份紀念證書，是好奇心與探索精神的獎勵。</p>
+      <p>恭喜你走遍十座學習島，<br>完成九個科班與進修部的尋寶挑戰！<br>這份紀念證書，是好奇心與探索精神的獎勵。</p>
       <label for="certName">證書顯示姓名（選填）</label>
       <input id="certName" maxlength="24" placeholder="留白則顯示「校園探索者」" autocomplete="off">
       <div class="reward-actions">
@@ -116,9 +116,9 @@
     <div class="intro-card">
       <div class="emblem" aria-hidden="true">✦ 🏺 ✦</div>
       <div class="intro-kicker">WELCOME TO OUR LITTLE WORLD</div>
-      <h2>鶯歌・九座學習島</h2>
+      <h2>鶯歌・十座學習島</h2>
       <p class="intro-lead">從一把陶土開始，每一種天賦都發光。</p>
-      <p>漂浮在雲海上的九座島嶼，九個科班各有舞台。<br>走過相連的橋梁，遇見男女學生、老師與散步的Q版校長，<br>切換四種場景風格，打開九個寶箱蒐集專屬徽章！</p>
+      <p>漂浮在雲海上的十座島嶼，九個科班與夜間的進修部各有舞台。<br>走過相連的橋梁，遇見男女學生、老師與散步的Q版校長，<br>切換四種場景風格，打開十個寶箱蒐集專屬徽章！</p>
       <button type="button" id="enter">走進鶯歌工商　↗</button>
     </div>
     <div class="credits">互動概念展示 · 建築相對位置非實際校園配置</div>
