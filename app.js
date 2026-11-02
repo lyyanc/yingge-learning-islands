@@ -505,9 +505,10 @@ function drawPrincipal() {
 }
 drawPrincipal();
 
-/* ---------- 鶯歌石：左上角的小浮島 ---------- */
+/* ---------- 鶯歌石：右上角的小浮島 ---------- */
+const LANDMARK_AT = {x: 1235, y: 215};
 function drawLandmark() {
-  const g = at(layer.sky, 1235, 215, {class: 'landmark', tabindex: 0, role: 'button', 'aria-label': '鶯歌石，點擊認識鶯歌地名的由來'});
+  const g = at(layer.sky, LANDMARK_AT.x, LANDMARK_AT.y, {class: 'landmark', tabindex: 0, role: 'button', 'aria-label': '鶯歌石，點擊認識鶯歌地名的由來'});
   const f = group(g, {class: 'float'});
   path('M -46 8 Q -40 30 -14 46 Q 0 60 12 46 Q 38 30 46 8 Z', 'url(#underside)', f);
   ellipse(0, 8, 46, 17, '#c4dcae', f, {class: 'island-top', stroke: '#f6f3df', 'stroke-width': 3});
@@ -566,14 +567,35 @@ function selectIsland(id) {
   selectedId = id;
   openSide({kicker: `ZONE ${pad(z.n)} · ${z.en}`, title: `${z.icon}　${z.name}`, desc: z.desc, facts: z.facts, tag: z.tag, link: z.url, zoomable: true});
   highlight(id);
+  reveal(z.cx, z.cy);
 }
 function meetPrincipal() {
   openSide({kicker: 'MEET THE PRINCIPAL', title: `${PRINCIPAL.name} 校長`, desc: PRINCIPAL.desc, tag: PRINCIPAL.tag, photo: {src: PRINCIPAL.photo, alt: `${PRINCIPAL.name}校長`}});
   highlight(null);
+  reveal(byId.ceramic.cx, byId.ceramic.cy);
 }
 function meetLandmark() {
   openSide({kicker: LANDMARK.en, title: `⛰️　${LANDMARK.name}`, desc: LANDMARK.desc, tag: LANDMARK.tag});
   highlight(null);
+  reveal(LANDMARK_AT.x, LANDMARK_AT.y, 50, 40);
+}
+// 介紹面板打開時，把地圖移開，讓點選的島不會被面板蓋住（電腦：面板在右邊；手機：面板在下方）
+function reveal(x, y, rx = RX, ry = RY) {
+  if (side.classList.contains('hidden')) return;
+  const k = mapWidth() / VIEW_W * zoom, a = spin * Math.PI / 180;
+  const ox = (x - VIEW_W / 2) * k, oy = (y - VIEW_H / 2) * k;
+  const c = mapAnchor();
+  const px = c.x + dx + ox * Math.cos(a) - oy * Math.sin(a);
+  const py = c.y + dy + ox * Math.sin(a) + oy * Math.cos(a);
+  const gap = 24;
+  if (innerWidth > 850) {
+    const limit = side.offsetLeft - gap;
+    if (px + rx * k > limit) dx -= px + rx * k - limit;
+  } else {
+    const limit = side.offsetTop - gap;
+    if (py + ry * k > limit) dy -= py + ry * k - limit;
+  }
+  render();
 }
 function closeSide() { side.classList.add('hidden'); highlight(null); }
 $('closeSide').onclick = closeSide;
@@ -611,6 +633,8 @@ function setMode(mode, caption) {
   $('viewCaption').textContent = caption;
 }
 const mapWidth = () => parseFloat(getComputedStyle(svg).width) || svg.getBoundingClientRect().width / zoom;
+// 地圖中心在舞台上的位置（電腦是高度 52%，手機版面是 54%，直接讀 CSS 算好的值）
+const mapAnchor = () => { const cs = getComputedStyle(svg); return {x: parseFloat(cs.left), y: parseFloat(cs.top)}; };
 function allIslands() {
   zoom = 1; dy = 0; spin = 0;
   // 手機上地圖比螢幕寬，先把中央的陶瓷島放在畫面中間
@@ -630,6 +654,7 @@ function closeTo(id) {
   dy = -(z.cy - VIEW_H / 2) * k;
   render();
   setMode('close', `近看：${z.name} · 拖曳觀察人物`);
+  reveal(z.cx, z.cy);
 }
 function zoomBy(f, clientX, clientY) {
   const next = Math.min(ZMAX, Math.max(ZMIN, zoom * f));
@@ -637,8 +662,8 @@ function zoomBy(f, clientX, clientY) {
   if (f === 1) return;
   if (clientX === undefined) { dx *= f; dy *= f; }
   else { // 以游標為中心縮放
-    const r = stage.getBoundingClientRect();
-    const qx = clientX - (r.left + r.width / 2 + dx), qy = clientY - (r.top + r.height * .52 + dy);
+    const r = stage.getBoundingClientRect(), c = mapAnchor();
+    const qx = clientX - (r.left + c.x + dx), qy = clientY - (r.top + c.y + dy);
     dx += qx * (1 - f); dy += qy * (1 - f);
   }
   zoom = next;
